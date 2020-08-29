@@ -1,4 +1,4 @@
-(ns ast-editor.struct)
+(ns nodes.struct)
 ;;Creation
 (defn get-empty-struct [] {:next 0 :holes [] :nodes {}})
 

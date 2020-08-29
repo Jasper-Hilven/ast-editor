@@ -1,6 +1,6 @@
-(ns ast-editor.operation
-  (:require [ast-editor.struct :refer :all]
-            [ast_editor.constraints :refer :all]))
+(ns operations.raw
+  (:require [nodes.struct :refer :all]
+            [nodes.constraints :refer :all]))
 
 (defn get-default-create-value-multiarity [onesided-spec leaf-node-type]
   (let [collection-type (:collection-type onesided-spec)]

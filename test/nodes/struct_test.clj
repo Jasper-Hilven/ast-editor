@@ -1,7 +1,7 @@
-(ns ast-editor.struct-test
+(ns nodes.struct-test
   (:require [clojure.test :refer :all]
-            [ast-editor.struct :refer :all]
-            [ast-editor.core :refer :all]))
+            [nodes.struct :refer :all]
+            [nodes.core :refer :all]))
 
 (def increased-by-one (increase-next (get-empty-struct)))
 (def one-node-added (:struct (add-node (get-empty-struct) {:name :node})))

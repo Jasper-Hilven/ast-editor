@@ -1,10 +1,11 @@
 (ns constraintgen.operations
-  (:require [ast_editor.constraints :refer :all]))
+  (:require [nodes.constraints :refer :all]))
 
 (defn get-default-create-value-multiarity [onesided-spec leaf-node-type]
   (let [collection-type (:collection-type onesided-spec)]
     (cond (= :set collection-type) #{}
           (= :list collection-type) [])))
+
 (defn get-all-default-create-properties [node-type]
   (let [relevant-onesided (get-all-relevant-onesided-specs node-type)
         multiarities (filter #(= (:arity %) :0_to_n) relevant-onesided)]
@@ -13,6 +14,7 @@
             {} multiarities)))
 
 (defn throw-invalid-node [] (throw (new Exception "Invalid node type")))
+
 (defn create-node [node-type]
   (if (not (in? standalone-types node-type))
     (throw-invalid-node)
@@ -22,6 +24,7 @@
          :node-properties default-create-properties}))))
 
 (create-node :funcdef)
+
 (defn remove-node [id node-type]
   (let [specs (get-all-relevant-onesided-specs node-type)
         multi-arities (filter #(= :0_to_n
@@ -47,7 +50,9 @@
                   single-arity-operations
                   [{:type    :remove-node
                     :node-id id}])))
+
 (remove-node 0 :funcdef)
+
 (defn add-relation-to-node [constraint-id from to data]
   (let [constraint (get-constraint-with-id constraint-id)
         from-con (:from constraint)
@@ -93,9 +98,6 @@
        :data  data
        :arity from-arity})))
 
-
-
-
 (defn remove-relation-from-node [constraint-id from to data]
   (let [constraint (get-constraint-with-id constraint-id)
         from-con (:from constraint)
@@ -140,6 +142,5 @@
        :to   from
        :data data}
       )))
-
 
 (add-relation-to-node :parameter-map 5 6 {})

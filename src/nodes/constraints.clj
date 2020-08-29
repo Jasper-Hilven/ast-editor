@@ -1,4 +1,4 @@
-(ns ast_editor.constraints)
+(ns nodes.constraints)
 
 (def types [:namespace :funcdef :funccall :constant :parameter :sexpr :scopecontainer])
 (def type-parents {:funcdef   #{:sexpr :scopecontainer}

@@ -1,5 +1,5 @@
 (ns constraintgen.operator
-  (:require [ast-editor.struct :refer :all]
+  (:require [nodes.struct :refer :all]
             [constraintgen.operations :as op]))
 
 (def assertion-types [:assert-type
