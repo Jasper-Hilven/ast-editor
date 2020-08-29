@@ -6,7 +6,7 @@
 (def function-with-parameter
   (-> (get-empty-struct)
       (add-function-node) :struct
-      (add-function-parameter 0) :struct))
+      (add-function-parameter-intern 0) :struct))
 
 (deftest test-namespacing
   (testing "should be able to use functions"
