@@ -15,6 +15,10 @@ Constraintgen track: on hold
 
 1) Operations and operator tries to abstract away
 
+Execution track
+One execution endpoint that aggregates all results of what needs to be executed, maybe use separate namespace in which
+to put everything that needs to be calculated
+
 Typecheck track
 Create a typecheck algorithm using basic data types (flow like)
 
