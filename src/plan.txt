@@ -1,8 +1,8 @@
 Nodes track: done
 
 1) Struct works at node level
-2) constraints define all the relations between the nodes
-
+2) constraints define all the constraints the relations have between the nodes
+3) relations is about querying the relations between nodes
 Operations track
 
 3) raw-operation is an unchecked but bilateral on/off switch for the relations

@@ -60,8 +60,7 @@
 (defn add-parameter-map-relation [struct function-call parameter]
   (-> struct
       (update-node-property function-call :parameter-map #(conj % parameter))
-      (update-node-property parameter :used-as-parameter #(conj % function-call))
-      ))
+      (update-node-property parameter :used-as-parameter #(conj % function-call))))
 
 (defn add-parameter-map-relations [struct function-call parameters]
   (reduce #(add-parameter-map-relation % function-call %2) struct parameters))
