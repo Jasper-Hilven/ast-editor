@@ -1,6 +1,5 @@
 (ns operations.raw-validation
   (:require [nodes.relations :as rel]))
-
 (defn can-add-scope-child? [struct scope-child scope-container]
   (and (not (rel/has-scope-parent struct scope-child))
        (rel/is-type-scope-container struct scope-container)))
