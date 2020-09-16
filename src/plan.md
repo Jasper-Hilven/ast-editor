@@ -46,3 +46,6 @@ Load basic functions like "if", basic data structure operations
 2) Create a modelview for full editor track
 3) Create an fn-fx ui that uses
 
+## Ast Editor track
+
+1) Connect all tracks
