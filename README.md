@@ -1,6 +1,6 @@
 # ast-editor
 
-AST editor that helps you building AST of any language.
+AST editor that helps you build a functional AST.
 
 ## License
 
