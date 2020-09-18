@@ -50,16 +50,16 @@
                            parametersForCallFunc (findParametersForCallFunction state functionCall)]
                        (str " -> " calledFunctionName "(" parametersForCallFunc ")")))))
 
+(defn parseConstant [state constantId]
+  (let [name (struct/get-node-property state constantId :name)
+        value (struct/get-node-property state constantId :value)]
+    (if name (str name ": " value))))
+
 (defn getConstantsForFunction [state functionId]
   (let [scopeChildren (into [] (struct/get-node-property state functionId :scope-children))]
     (reduce #(str %1 "\n\t\t" %2)
             ""
-            (map #(let [name (struct/get-node-property state % :name)
-                       value (struct/get-node-property state % :value)]
-                    (str "const "
-                         (if name
-                           (str name ": " value)
-                           (str value))))
+            (map #(parseConstant state %)
                  (filter #(= (struct/get-node-property state % :type) :constant) scopeChildren)))))
 
 (defn renderFunctionContent [state functionId]
