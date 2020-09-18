@@ -23,15 +23,17 @@
 (defn create-empty-funccall [struct] (create-node-of-type-with-default-properties struct :funccall))
 (defn create-empty-constant [struct] (create-node-of-type-with-default-properties struct :constant))
 
+
+
+(defn set-node-name [struct node name]
+  (set-node-property struct node :name name))
+(def set-function-name set-node-name)
+(def set-namespace-name set-node-name)
 (defn add-scope-child [struct scope-child scope-container]
   (-> struct
       (update-node-property scope-container :scope-children #(conj % scope-child))
       (set-node-property scope-child :parent-scope scope-container)))
 
-(defn set-function-name [struct function name]
-  (set-node-property struct function :name name))
-(defn set-namespace-name [struct namespace name]
-  (set-node-property struct namespace :name name))
 
 (defn add-new-parameter-to-function [struct function parameter-name]
   (let [parameter-created (create-empty-parameter struct)
@@ -111,9 +113,14 @@
      {:struct   (set-namespace-name empty-namespace-created-struct empty-namespace-created-child name)
       :node-key empty-namespace-created-child})))
 
-(defn create-constant [struct constant-value]
-  (let [constant-add (create-empty-constant struct)]
-    "todo"))
+(defn create-constant [struct constant-value scope-container]
+  (let [constant-add (create-empty-constant struct)
+        constant-add-struct (:struct constant-add)
+        constant-add-key (:node-key constant-add)]
+    {:struct (-> constant-add-struct
+                 (set-node-property constant-add-key :value constant-value)
+                 (add-scope-child constant-add-key scope-container))
+     :node-key constant-add-key}))
 
 (def empt (get-empty-struct))
 (def func-created (-> (:struct (create-empty-namespace (get-empty-struct)))

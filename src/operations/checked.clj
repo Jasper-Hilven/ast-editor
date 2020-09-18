@@ -8,7 +8,7 @@
     (resultify (apply result-func params))
     (errorify error-message)))
 (defn chain-opp
-  [struct & operations] (reduce #(:struct (:result (%2 %1))) struct operations ))
+  [struct & operations] (reduce #(:struct (:result (%2 %1))) struct operations))
 (defn add-scope-child [struct scope-child scope-container]
   (cond-result-error [struct scope-child scope-container]
                      v/can-add-scope-child?
@@ -48,8 +48,13 @@
    (cond-result-error [struct name parent]
                       v/can-create-ns?
                       r/create-namespace
-                      "Cannot create namespace"))
-  )
+                      "Cannot create namespace")))
+
+(defn create-constant [struct constant-value scope-container]
+  (cond-result-error [struct constant-value scope-container]
+                     v/can-create-constant?
+                     r/create-constant
+                     "Cannot create constant"))
 (defn add-function-call-relation [struct function function-call]
   (cond-result-error [struct function function-call]
                      v/can-add-function-call-relation?
