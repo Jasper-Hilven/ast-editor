@@ -16,7 +16,7 @@
                #(c/create-namespace % "demo" 0)
                #(c/create-func % "strconcat2" 0 ["first" "second"])
                #(c/create-func % "hello-world" 1 ["name"])
-               #(c/create-constant % "Hello " 5)
+               #(c/create-constant % "Hello" 5)
                #(c/create-function-call % 2 5 [6 7])
                #(c/set-as-function-result % 5 8)))
 
