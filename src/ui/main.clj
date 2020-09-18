@@ -55,7 +55,7 @@
     (reduce #(str %1 "\n\t\t" %2)
             ""
             (map #(let [name (struct/get-node-property state % :name)
-                       value (struct/get-node-property state % :value)]
+                        value (struct/get-node-property state % :value)]
                     (str "const "
                          (if name
                            (str name ": " value)
@@ -98,14 +98,12 @@ env/start-environment
 
                                           (ui/menu-item :text "Exit"
                                                         :on-action {:event :file-exit})
-
                                           ])
-
-                                                  (create-mock-ui-component "Navigate")
-                                                  (create-mock-ui-component "Refactor")
-                                                  (create-mock-ui-component "Cleanup")
-                                                  (create-mock-ui-component "Preferences")
-                                                  (create-mock-ui-component "Run")
+                         (create-mock-ui-component "Navigate")
+                         (create-mock-ui-component "Refactor")
+                         (create-mock-ui-component "Cleanup")
+                         (create-mock-ui-component "Preferences")
+                         (create-mock-ui-component "Run")
 
                          (ui/menu :text "Help"
                                   :items [(ui/menu-item :text "About"
