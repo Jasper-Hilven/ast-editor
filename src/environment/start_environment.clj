@@ -13,7 +13,7 @@
 (def start-environment
   (c/chain-opp (st/get-empty-struct)
                #(c/create-namespace % "root")
-               #(c/create-namespace % "demo")
+               #(c/create-namespace % "demo" 0)
                #(c/create-func % "strconcat2" 0 ["first" "second"])
                #(c/create-func % "hello-world" 1 ["name"])
                #(c/create-function-call % 2 5 [6 6])

@@ -58,7 +58,7 @@
                    :type :bi
                    :from {:type  :namespace :name "namespace-children"
                           :arity :0_to_n :collection-type :set}
-                   :to   {:type  :namespace :name "parent-namepace"
+                   :to   {:type  :namespace :name "parent-namespace"
                           :arity :0_to_1}}
                   ])
 (defn is-me-or-parent [me to-test]

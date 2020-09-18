@@ -77,7 +77,7 @@
 (defn add-namespace-parent [struct child-namespace parent-namespace]
   (-> struct
       (update-node-property parent-namespace :namespace-children #(conj % child-namespace))
-      (set-node-property child-namespace :parent-namepace parent-namespace)))
+      (set-node-property child-namespace :parent-namespace parent-namespace)))
 (defn add-parameter-map-relations [struct function-call parameters]
   (reduce #(add-parameter-map-relation % function-call %2) struct parameters))
 
