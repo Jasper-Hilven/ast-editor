@@ -83,7 +83,9 @@ env/start-environment
           (map #(str " namespace " (getFullNamespaceName state %) "\n\t" (getFunctionsAndTheirParameters state %))
                (findNameSpaces state)))
   )
-
+(defn create-mock-ui-component [name]
+  (ui/menu :text name
+           :items [(ui/menu-item :text name :on-action {:event :mock :mock-name name})]))
 (defui TheMenu
        (render [this _]
                (ui/menu-bar
@@ -92,8 +94,19 @@ env/start-environment
                                                         :on-action {:event :file-new})
                                           (ui/menu-item :text "Open"
                                                         :on-action {:event :file-open})
+
+
                                           (ui/menu-item :text "Exit"
-                                                        :on-action {:event :file-exit})])
+                                                        :on-action {:event :file-exit})
+
+                                          ])
+
+                                                  (create-mock-ui-component "Navigate")
+                                                  (create-mock-ui-component "Refactor")
+                                                  (create-mock-ui-component "Cleanup")
+                                                  (create-mock-ui-component "Preferences")
+                                                  (create-mock-ui-component "Run")
+
                          (ui/menu :text "Help"
                                   :items [(ui/menu-item :text "About"
                                                         :on-action {:event :help-exit})])])))
