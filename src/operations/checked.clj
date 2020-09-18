@@ -7,7 +7,8 @@
   (if (apply cond-func params)
     (resultify (apply result-func params))
     (errorify error-message)))
-
+(defn chain-opp
+  [struct & operations] (reduce #(:struct (:result (%2 %1))) struct operations ))
 (defn add-scope-child [struct scope-child scope-container]
   (cond-result-error [struct scope-child scope-container]
                      v/can-add-scope-child?
@@ -37,7 +38,18 @@
                      v/can-create-empty-func?
                      r/create-func
                      "An invalid scope container is given"))
-
+(defn create-namespace
+  ([struct name]
+   (cond-result-error [struct name]
+                      v/can-create-ns?
+                      r/create-namespace
+                      "Cannot create namespace"))
+  ([struct name parent]
+   (cond-result-error [struct name parent]
+                      v/can-create-ns?
+                      r/create-namespace
+                      "Cannot create namespace"))
+  )
 (defn add-function-call-relation [struct function function-call]
   (cond-result-error [struct function function-call]
                      v/can-add-function-call-relation?
@@ -45,5 +57,13 @@
                      "The function relation cannot be add."))
 (defn add-parameter-map-relation [struct function-call parameter] true)
 (defn add-parameter-map-relations [struct function-call parameters] true)
-(defn create-function-call [struct function scope-container parameter-values] true)
-(defn set-as-function-result [struct function result] true)
+(defn create-function-call [struct function scope-container parameter-values]
+  (cond-result-error [struct function scope-container parameter-values]
+                     v/can-create-function-call?
+                     r/create-function-call
+                     "The function call cannot be created"))
+(defn set-as-function-result [struct function result]
+  (cond-result-error [struct function result]
+                     v/can-set-as-function-result?
+                     r/set-as-function-result
+                     "The result cannot be set for the given function"))

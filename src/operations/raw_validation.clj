@@ -19,7 +19,14 @@
   (and (rel/is-type-function-def struct function)
        (rel/is-type-function-call struct function-call)
        (rel/has-no-function-that-it-calls struct function-call)))
+(defn can-create-ns?
+  ([struct name parent]
+   (rel/is-type-namespace struct parent))
+  ([struct name] true))
+
 (defn can-add-parameter-map-relation? [struct function-call parameter] true)
 (defn can-add-parameter-map-relations? [struct function-call parameters] true)
 (defn can-create-function-call? [struct function scope-container parameter-values] true)
-(defn can-set-as-function-result? [struct function result] true)
+(defn can-set-as-function-result? [struct function result]
+  (and (rel/is-type-function-def struct function)
+       (rel/is-type-s-expr struct result)))

@@ -12,8 +12,12 @@
   (is-my-or-parent-type struct node :scopecontainer))
 (defn is-type-function-def [struct node]
   (is-my-or-parent-type struct node :funcdef))
+(defn is-type-s-expr [struct node]
+  (is-my-or-parent-type struct node :sexpr))
 (defn is-type-function-call [struct node]
   (is-my-or-parent-type struct node :funccall))
+(defn is-type-namespace [struct node]
+  (is-my-or-parent-type struct node :namespace))
 
 (defn has-function-that-it-calls [struct function-call]
   (some? (get-node-property struct function-call :calls)))
