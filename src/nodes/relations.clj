@@ -19,10 +19,6 @@
 (defn is-type-namespace [struct node]
   (is-my-or-parent-type struct node :namespace))
 
-(defn has-function-that-it-calls [struct function-call]
-  (some? (get-node-property struct function-call :calls)))
-(defn has-no-function-that-it-calls [struct function-call]
-  (nil? (get-node-property struct function-call :calls)))
 
 (defn get-parent-s-expression-scope [struct expression]
   ()

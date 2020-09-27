@@ -59,11 +59,7 @@
                      v/can-create-constant?
                      r/create-constant
                      "Cannot create constant"))
-(defn add-function-call-relation [struct function function-call]
-  (cond-result-error [struct function function-call]
-                     v/can-add-function-call-relation?
-                     r/add-function-call-relation
-                     "The function relation cannot be add."))
+
 (defn add-parameter-map-relation [struct function-call parameter] true)
 (defn add-parameter-map-relations [struct function-call parameters] true)
 (defn create-function-call [struct function scope-container parameter-values]

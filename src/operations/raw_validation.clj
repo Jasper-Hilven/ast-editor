@@ -15,10 +15,7 @@
 
 (defn can-create-empty-func? [struct funcname scope-container parameters]
   (and (rel/is-type-scope-container struct scope-container)))
-(defn can-add-function-call-relation? [struct function function-call]
-  (and (rel/is-type-function-def struct function)
-       (rel/is-type-function-call struct function-call)
-       (rel/has-no-function-that-it-calls struct function-call)))
+
 (defn can-create-ns?
   ([struct name parent]
    (rel/is-type-namespace struct parent))

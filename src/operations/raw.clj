@@ -66,11 +66,6 @@
                  )
      :node-key created-func-key}))
 
-(defn add-function-call-relation [struct function function-call]
-  (-> struct
-      (set-node-property function-call :called function)
-      (update-node-property function :calls #(conj % function-call)))
-  )
 
 (defn add-parameter-map-relation [struct function-call parameter]
   (-> struct
@@ -84,11 +79,10 @@
 (defn add-parameter-map-relations [struct function-call parameters]
   (reduce #(add-parameter-map-relation % function-call %2) struct parameters))
 
-(defn create-function-call [struct function scope-container parameter-values]
+(defn create-function-call [struct scope-container parameter-values]
   (let [created (create-empty-funccall struct)
         created-key (:node-key created)]
     {:struct   (-> (:struct created)
-                   (add-function-call-relation function created-key)
                    (add-scope-child created-key scope-container)
                    (add-parameter-map-relations created-key parameter-values))
      :node-key created-key}))
@@ -129,7 +123,7 @@
 (def empt (get-empty-struct))
 (def func-created (-> (:struct (create-empty-namespace (get-empty-struct)))
                       (create-func-deprecated "hello-world" 0 ["Param1" "Param2"])))
-(def func-called (-> func-created (create-function-call 1 1 [2 3])))
+(def func-called (-> func-created (create-function-call 1 [1 2 3])))
 (def set-as-result (-> func-called (set-as-function-result 1 4)))
 (add-scope-child func-created 1 0)
 (def withConstant (create-empty-constant func-created))
@@ -147,7 +141,6 @@
  :nodes {0 {:scope-children #{1}, :namespace-children #{}, :type :namespace},
          1 {:used-as-parameter #{},
             :scope-children #{},
-            :calls #{},
             :parameters [2 3],
             :function-result #{},
             :type :funcdef,

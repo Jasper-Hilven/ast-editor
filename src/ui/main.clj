@@ -43,13 +43,6 @@
 
 (struct/get-all-nodes env/start-environment)
 
-(defn findFunctionCalls [state functionId]
-  (let [functionCall (struct/get-node-property state functionId :result)]
-    (if functionCall (let [called (struct/get-node-property state functionCall :called)
-                           calledFunctionName (struct/get-node-property state called :name)
-                           parametersForCallFunc (findParametersForCallFunction state functionCall)]
-                       (str " -> " calledFunctionName "(" parametersForCallFunc ")")))))
-
 (defn parseConstant [state constantId]
   (let [name (struct/get-node-property state constantId :name)
         value (struct/get-node-property state constantId :value)]
@@ -64,9 +57,8 @@
 
 (defn renderFunctionContent [state functionId]
   (let [functionName (struct/get-node-property state functionId :name)
-        functionParameters (findParametersForFunction state functionId)
-        functionCalls (findFunctionCalls state functionId)]
-    (str " function " functionName "(" functionParameters ")" functionCalls
+        functionParameters (findParametersForFunction state functionId)]
+    (str " function " functionName "(" functionParameters ")"
          "\t\t" (getConstantsForFunction state functionId))))
 
 (defn getFunctionsAndTheirParameters [state namespaceId]
