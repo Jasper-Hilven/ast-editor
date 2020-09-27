@@ -1,12 +1,16 @@
 (ns operations.checked
   (:require [operations.raw :as r]
             [operations.raw-validation :as v]))
+
+;;Checked operations is a check on whether the raw operations is possible + the execution of the raw operation
 (defn resultify [result] {:result result})
 (defn errorify [message] {:error message})
 (defn cond-result-error [params cond-func result-func error-message]
   (if (apply cond-func params)
     (resultify (apply result-func params))
     (errorify error-message)))
+(defn get-node-result [result] (:node-key (:result result)))
+(defn get-struct-result [result] (:struct (:result result)))
 (defn chain-opp
   [struct & operations] (reduce #(:struct (:result (%2 %1))) struct operations))
 (defn add-scope-child [struct scope-child scope-container]
@@ -72,3 +76,4 @@
                      v/can-set-as-function-result?
                      r/set-as-function-result
                      "The result cannot be set for the given function"))
+(defn replace-all-usages-with [struct to-replace-expression with-expression] )

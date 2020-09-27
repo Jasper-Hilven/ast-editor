@@ -18,7 +18,7 @@
                           :arity :0_to_n :collection-type :set}}
 
                   {:id   :scope-children
-                   :name "Expressions within a function are scope children"
+                   :name "Expressions within a scope container are scope children"
                    :type :bi
                    :from {:type  :scopecontainer :name "scope-children"
                           :arity :0_to_n :collection-type :set}

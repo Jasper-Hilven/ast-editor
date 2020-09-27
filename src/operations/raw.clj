@@ -1,7 +1,9 @@
 (ns operations.raw
   (:require [nodes.struct :refer :all]
             [nodes.constraints :refer :all]))
-
+;; It may update multiple relations as long as they are related to the single node.
+;; In case of a created or deleted node, this should be the 'single node'.
+;; No more than 1 single node should be created or deleted, with exception of parameters.
 (defn get-default-create-value-multiarity [onesided-spec leaf-node-type]
   (let [collection-type (:collection-type onesided-spec)]
     (cond (= :set collection-type) #{}
@@ -22,8 +24,6 @@
 (defn create-empty-parameter [struct] (create-node-of-type-with-default-properties struct :parameter))
 (defn create-empty-funccall [struct] (create-node-of-type-with-default-properties struct :funccall))
 (defn create-empty-constant [struct] (create-node-of-type-with-default-properties struct :constant))
-
-
 
 (defn set-node-name [struct node name]
   (set-node-property struct node :name name))
@@ -55,6 +55,7 @@
         (add-scope-child created-func-key scope-container)
         (add-new-parameters-to-function created-func-key parameters)
         )))
+
 (defn create-func [struct funcname scope-container parameters]
   (let [created (create-empty-funcdef struct)
         created-func-key (:node-key created)]
@@ -121,6 +122,9 @@
                  (set-node-property constant-add-key :value constant-value)
                  (add-scope-child constant-add-key scope-container))
      :node-key constant-add-key}))
+
+(defn replace-all-usages-with [struct to-replace-expression with-expression] )
+
 
 (def empt (get-empty-struct))
 (def func-created (-> (:struct (create-empty-namespace (get-empty-struct)))

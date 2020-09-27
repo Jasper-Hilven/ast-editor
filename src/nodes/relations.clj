@@ -23,3 +23,8 @@
   (some? (get-node-property struct function-call :calls)))
 (defn has-no-function-that-it-calls [struct function-call]
   (nil? (get-node-property struct function-call :calls)))
+
+(defn get-parent-s-expression-scope [struct expression]
+  ()
+
+  )

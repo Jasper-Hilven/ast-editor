@@ -12,7 +12,7 @@ All tracks that can be executed.
 
 - [x] raw-operation is an unchecked but bilateral on/off switch for the relations
 - [x] raw-validation checks what raw operation is possible and what not based on the constraints
-- [ ] checked-operation is a safe operation on top of raw validation and operation
+- [x] checked-operation is a safe operation on top of raw validation and operation
 - [ ] smooth-operation is a combine removal operation level (e.g. set function result if function has already a result will replace the current function result)
 - [ ] smart-operation does combined operations like extract-subfunction, inline function...
 
