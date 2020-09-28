@@ -72,4 +72,8 @@
                      v/can-set-as-function-result?
                      r/set-as-function-result
                      "The result cannot be set for the given function"))
-(defn replace-all-usages-with [struct to-replace-expression with-expression] )
+(defn replace-all-usages-with [struct to-replace-expression with-expression]
+  (cond-result-error [struct to-replace-expression with-expression]
+                     v/can-replace-all-usages-with?
+                     r/replace-all-usages-with
+                     "Both the to replace and the with expression should be s expressions"))

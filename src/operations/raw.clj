@@ -1,6 +1,7 @@
 (ns operations.raw
   (:require [nodes.struct :refer :all]
-            [nodes.constraints :refer :all]))
+            [nodes.constraints :refer :all]
+            [nodes.relations :as r]))
 ;; It may update multiple relations as long as they are related to the single node.
 ;; In case of a created or deleted node, this should be the 'single node'.
 ;; No more than 1 single node should be created or deleted, with exception of parameters.
@@ -59,11 +60,11 @@
 (defn create-func [struct funcname scope-container parameters]
   (let [created (create-empty-funcdef struct)
         created-func-key (:node-key created)]
-    {:struct (-> (:struct created)
-                 (set-function-name created-func-key funcname)
-                 (add-scope-child created-func-key scope-container)
-                 (add-new-parameters-to-function created-func-key parameters)
-                 )
+    {:struct   (-> (:struct created)
+                   (set-function-name created-func-key funcname)
+                   (add-scope-child created-func-key scope-container)
+                   (add-new-parameters-to-function created-func-key parameters)
+                   )
      :node-key created-func-key}))
 
 
@@ -112,12 +113,23 @@
   (let [constant-add (create-empty-constant struct)
         constant-add-struct (:struct constant-add)
         constant-add-key (:node-key constant-add)]
-    {:struct (-> constant-add-struct
-                 (set-node-property constant-add-key :value constant-value)
-                 (add-scope-child constant-add-key scope-container))
+    {:struct   (-> constant-add-struct
+                   (set-node-property constant-add-key :value constant-value)
+                   (add-scope-child constant-add-key scope-container))
      :node-key constant-add-key}))
 
-(defn replace-all-usages-with [struct to-replace-expression with-expression] )
+
+(defn replace-single-usage-with [struct funccall to-replace-expression with-expression]
+  (let [parameter-map (r/get-parameter-map struct funccall)
+        replaced-parameters (mapv #(if (= % to-replace-expression) with-expression %) parameter-map)
+        with-replaced-parameters (set-node-property struct funccall :parameter-map replaced-parameters)
+        remove-old-usage (update-node-property with-replaced-parameters to-replace-expression :used-as-parameter #(disj % funccall))
+        add-new-usage (update-node-property remove-old-usage with-expression :used-as-parameter #(conj % funccall))
+        ]
+    add-new-usage))
+(defn replace-all-usages-with [struct to-replace-expression with-expression]
+  (let [all-users (r/get-parameter-usage struct to-replace-expression)]
+    (reduce #(replace-single-usage-with %1 %2 to-replace-expression with-expression) struct all-users)))
 
 
 (def empt (get-empty-struct))
@@ -136,16 +148,16 @@
 (-> empt (create-namespace "Root") (:struct) (create-namespace "Jos" 0))
 
 
-{:next 4,
+{:next  4,
  :holes [],
  :nodes {0 {:scope-children #{1}, :namespace-children #{}, :type :namespace},
          1 {:used-as-parameter #{},
-            :scope-children #{},
-            :parameters [2 3],
-            :function-result #{},
-            :type :funcdef,
-            :name "hello-world",
-            :parent-scope 0},
+            :scope-children    #{},
+            :parameters        [2 3],
+            :function-result   #{},
+            :type              :funcdef,
+            :name              "hello-world",
+            :parent-scope      0},
          2 {:used-as-parameter #{}, :function-result #{}, :type :parameter, :name "Param1", :function 1},
          3 {:used-as-parameter #{}, :function-result #{}, :type :parameter, :name "Param2", :function 1}}}
 

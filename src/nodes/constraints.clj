@@ -25,16 +25,6 @@
                    :to   {:type  :sexpr :name "parent-scope"
                           :arity :0_to_1}
                    }
-                  {:id   :func-call
-                   :name "Callee of a function"
-                   :type :bi
-                   :from {:type  :funcdef :name "calls"
-                          :arity :0_to_n :collection-type :set}
-                   :to   {:type                      :funccall
-                          :name                      "called"
-                          :arity                     :1
-                          :constructor-argument-name "function"
-                          }}
                   {:id   :function-parameters
                    :name "Parameters of a function"
                    :type :bi

@@ -29,3 +29,6 @@
 (defn can-set-as-function-result? [struct function result]
   (and (rel/is-type-function-def struct function)
        (rel/is-type-s-expr struct result)))
+(defn can-replace-all-usages-with? [struct to-replace-expression with-expression]
+  (and (rel/is-type-s-expr struct to-replace-expression)
+       (rel/is-type-s-expr struct with-expression)))

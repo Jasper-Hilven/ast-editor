@@ -19,6 +19,11 @@
 (defn is-type-namespace [struct node]
   (is-my-or-parent-type struct node :namespace))
 
+(defn get-parameter-usage [struct node]
+  (get-node-property struct node :used-as-parameter))
+(defn get-parameter-map [struct funccall]
+  (get-node-property struct funccall :parameter-map))
+
 
 (defn get-parent-s-expression-scope [struct expression]
   ()
