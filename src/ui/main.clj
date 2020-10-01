@@ -23,12 +23,6 @@
                (into [] (struct/get-node-property state functionId :parameters))))
   )
 
-(defn findParametersForCallFunction [state functionId]
-  (reduce #(str %1 "," %2)
-          (map #(getCorrectInformationForParameter state %)
-               (struct/get-node-property state functionId :parameter-map)))
-  )
-
 (defn findFunctionsForNamespace [state namespaceId]
   (filter #(relations/is-type-function-def state %) (into [] (struct/get-node-property state namespaceId :scope-children)))
   )
