@@ -2,6 +2,7 @@
   (:require [nodes.struct :refer :all]
             [nodes.constraints :refer :all]))
 
+;;Types
 (defn is-my-or-parent-type [struct node type-to-check]
   (is-me-or-parent (get-node-type struct node) type-to-check))
 (defn is-type-scope-container [struct node]
@@ -20,6 +21,7 @@
   (get-node-property struct sexpr :used-as-parameter))
 (defn get-parameter-map [struct funccall]
   (get-node-property struct funccall :parameter-map))
+
 ;; SCOPECONTAINER <=> sexpr
 (defn get-scope-parent [struct sexpr]
   (get-node-property struct sexpr :parent-scope))
@@ -40,8 +42,10 @@
 (defn get-functions-which-use-me-as-result [struct result-sexpr]
   (get-node-property struct result-sexpr :function-result))
 
-;; parent-amespace <=> child-namespace
+;; parent-namespace <=> child-namespace
 (defn get-namespace-children [struct parent-namespace]
   (get-node-property struct parent-namespace :namespace-children))
 (defn get-parent-namespace [struct child-namespace]
   (get-node-property struct child-namespace :parent-namespace))
+(defn get-name [struct node]
+  (get-node-property struct node :name))
