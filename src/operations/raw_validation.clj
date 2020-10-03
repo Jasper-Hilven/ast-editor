@@ -23,7 +23,7 @@
 
 (defn can-add-parameter-map-relation? [struct function-call parameter] true)
 (defn can-add-parameter-map-relations? [struct function-call parameters] true)
-(defn can-create-function-call? [struct function scope-container parameter-values] true)
+(defn can-create-function-call? [struct scope-container parameter-values] true)
 (defn can-create-constant? [struct constant-value scope-container]
   (rel/is-type-scope-container struct scope-container))
 (defn can-set-as-function-result? [struct function result]

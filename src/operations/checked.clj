@@ -62,8 +62,8 @@
 
 (defn add-parameter-map-relation [struct function-call parameter] true)
 (defn add-parameter-map-relations [struct function-call parameters] true)
-(defn create-function-call [struct function scope-container parameter-values]
-  (cond-result-error [struct function scope-container parameter-values]
+(defn create-function-call [struct scope-container parameter-values]
+  (cond-result-error [struct scope-container parameter-values]
                      v/can-create-function-call?
                      r/create-function-call
                      "The function call cannot be created"))

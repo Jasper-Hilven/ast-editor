@@ -49,3 +49,7 @@
   (get-node-property struct child-namespace :parent-namespace))
 (defn get-name [struct node]
   (get-node-property struct node :name))
+
+(defn find-namespaces [state]
+  (filter #(= (get-node-property state % :type) :namespace)
+          (get-all-nodes-keys state)))

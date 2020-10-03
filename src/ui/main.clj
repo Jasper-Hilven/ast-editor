@@ -1,74 +1,13 @@
 (ns ui.main
   (:require [fn-fx.fx-dom :as dom]
             [clojure.pprint :refer [cl-format]]
-            [environment.start-environment :as env]
+            [operations.smart :as smart]
             [nodes.struct :as struct]
+            [ui.text-render :as text-render]
             [nodes.relations :as relations]
             [fn-fx.diff :refer [component defui render should-update?]]
             [fn-fx.controls :as ui]))
 
-(defn getCorrectInformationForParameter [state, parameterId]
-  (let [parameterName (struct/get-node-property state parameterId :name)
-        value (struct/get-node-property state parameterId :value)]
-    (if parameterName
-      (str parameterName)
-      (if (string? value)
-        (str "\"" value "\"(const)")
-        (str value "(const)"))
-      )))
-
-(defn findParametersForFunction [state functionId]
-  (reduce #(str %1 "," %2)
-          (map #(str (getCorrectInformationForParameter state %))
-               (into [] (struct/get-node-property state functionId :parameters))))
-  )
-
-(defn findFunctionsForNamespace [state namespaceId]
-  (filter #(relations/is-type-function-def state %) (into [] (struct/get-node-property state namespaceId :scope-children)))
-  )
-
-(defn getFullNamespaceName [state namespaceId]
-  (let [parentNode (struct/get-node-property state namespaceId :parent-namespace)
-        childName (struct/get-node-property state namespaceId :name)]
-    (if parentNode
-      (str (getFullNamespaceName state parentNode) "." childName)
-      childName))
-  )
-
-(struct/get-all-nodes env/start-environment)
-
-(defn parseConstant [state constantId]
-  (let [name (struct/get-node-property state constantId :name)
-        value (struct/get-node-property state constantId :value)]
-    (if name (str name ": " value))))
-
-(defn getConstantsForFunction [state functionId]
-  (let [scopeChildren (into [] (struct/get-node-property state functionId :scope-children))]
-    (reduce #(str %1 "\n\t\t" %2)
-            ""
-            (map #(parseConstant state %)
-                 (filter #(= (struct/get-node-property state % :type) :constant) scopeChildren)))))
-
-(defn renderFunctionContent [state functionId]
-  (let [functionName (struct/get-node-property state functionId :name)
-        functionParameters (findParametersForFunction state functionId)]
-    (str " function " functionName "(" functionParameters ")"
-         "\t\t" (getConstantsForFunction state functionId))))
-
-(defn getFunctionsAndTheirParameters [state namespaceId]
-  (reduce #(str %1 "\n\t" %2)
-          (map #(renderFunctionContent state %) (findFunctionsForNamespace state namespaceId)))
-  )
-
-(defn findNameSpaces [state]
-  (filter #(= (struct/get-node-property state % :type) :namespace) (struct/get-all-nodes-keys state))
-  )
-env/start-environment
-(defn pprint [state]
-  (reduce #(str %1 "\n\n" %2)
-          (map #(str " namespace " (getFullNamespaceName state %) "\n\t" (getFunctionsAndTheirParameters state %))
-               (findNameSpaces state)))
-  )
 (defn create-mock-ui-component [name]
   (ui/menu :text name
            :items [(ui/menu-item :text name :on-action {:event :mock :mock-name name})]))
@@ -98,7 +37,7 @@ env/start-environment
 (defui CodeBox
        (render [with-precision state]
                (ui/label
-                 :text (pprint state)))
+                 :text (text-render/pprint state)))
        )
 (defui MainWindow
        (render [this state]
@@ -117,8 +56,12 @@ env/start-environment
                  :scene (ui/scene
                           :root (main-window args)))))
 
+(def start-state (:result (smart/replace-with-direct-function-call environment.start-environment/start-environment 6 "HelloFunc")))
+(pprint start-state)
+(relations/find-namespaces start-state)
+(struct/get-all-nodes-keys start-state)
 (defn -main []
-  (let [state (atom env/start-environment)
+  (let [state (atom start-state)
         handler-fn (fn [event]
                      (println event))
         ui-state (atom (dom/app (main-stage @state) handler-fn))]
