@@ -6,6 +6,7 @@
 (defn get-all-nodes-keys [structure] (filter number? (keys (:nodes structure))))
 (defn get-all-nodes [structure] (map (:nodes structure) (get-all-nodes-keys structure)))
 (defn get-node-property [structure node property] (get-in structure [:nodes node property]))
+(defn has-node-property [structure node property] (not (nil? (get-in structure [:nodes node property] nil))))
 (defn get-node-type [structure node] (get-node-property structure node :type))
 
 ;;Operations

@@ -1,22 +1,18 @@
 (ns ui.text-render
-  (:require [fn-fx.fx-dom :as dom]
-            [clojure.pprint :refer [cl-format]]
+  (:require [clojure.pprint :refer [cl-format]]
             [environment.start-environment :as env]
             [nodes.struct :as struct]
-            [nodes.relations :as relations]
-
-            ))
-
+            [nodes.relations :as relations]))
 
 (defn get-full-namespace-name [state namespaceId]
   (let [parentNode (relations/get-parent-namespace state namespaceId)
         childName (relations/get-name state namespaceId)
         parent-prefix (if parentNode (str (get-full-namespace-name state parentNode) ".") "")]
-    (str parent-prefix childName))
+    (str parent-prefix childName)))
 
-  (defn findFunctionsForNamespace [state namespaceId]
-    (filter #(relations/is-type-function-def state %)
-            (into [] (relations/get-scope-children state namespaceId)))))
+(defn findFunctionsForNamespace [state namespaceId]
+  (filter #(relations/is-type-function-def state %)
+          (into [] (relations/get-scope-children state namespaceId))))
 
 (defn getCorrectInformationForParameter [state, parameterId]
   (let [parameterName (struct/get-node-property state parameterId :name)
@@ -58,9 +54,32 @@
 (defn getFunctionsAndTheirParameters [state namespace]
   (reduce #(str %1 "\n\t" %2)
           (map #(renderFunctionContent state %)
-               (findFunctionsForNamespace state namespace)))
-  )
+               (findFunctionsForNamespace state namespace))))
 
+
+(defn render-function-def [struct function])
+(defn render-s-expr [struct s-expr parent-container])
+(defn sort-namespaces-by-name [struct namespaces]
+  (sort-by #(relations/get-name struct %) namespaces))
+(defn render-scope-children [struct scope-container]
+  (let [children (relations/get-scope-children struct scope-container)
+        named-children (filter #(relations/has-name struct %) children)
+        unnamed-children (filter #(not (relations/has-name struct %)) children)
+        ] {:children         children
+           :unnamed-children unnamed-children
+           :named-children   named-children}))
+
+(defn render-namespace [struct namespace]
+  {:type             :namespace
+   :name             (relations/get-name struct namespace)
+   :full-name        (get-full-namespace-name struct namespace)
+   :child-namespaces (map #(render-namespace struct %) (relations/get-namespace-children struct namespace))
+   :scope-children   (render-scope-children struct namespace)})
+(defn render-namespaces [struct]
+  (let [namespaces (relations/find-namespaces struct)
+        root-namespaces (filter #(nil? (relations/get-parent-namespace struct %)) namespaces)
+        sorted-root-namespaces (sort-namespaces-by-name struct root-namespaces)]
+    (map #(render-namespace struct %) sorted-root-namespaces)))
 
 (defn pprint [state]
   (let [lines (map #(str " namespace " (get-full-namespace-name state %) "\n\t" (getFunctionsAndTheirParameters state %))
